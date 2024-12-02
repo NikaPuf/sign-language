@@ -38,10 +38,7 @@ def is_T(landmarks):
     middle_tip = landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
     ring_tip = landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_TIP]
     pinky_tip = landmarks.landmark[mp_hands.HandLandmark.PINKY_TIP]
-    if (thumb_tip.x < index_tip.x and
-            index_tip.y < middle_tip.y and
-            middle_tip.y < ring_tip.y and
-            ring_tip.y < pinky_tip.y):
+    if (thumb_tip.x < index_tip.x and index_tip.y < middle_tip.y and middle_tip.y < ring_tip.y and ring_tip.y < pinky_tip.y):
         return True
     return False
 
@@ -54,6 +51,16 @@ def is_E(landmarks):
 
     if thumb_tip.y < index_tip.y and thumb_tip.y < middle_tip.y and thumb_tip.y < ring_tip.y and thumb_tip.y < pinky_tip.y:
         return True
+    return False
+
+def is_O(landmarks):
+    thumb_tip = landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
+    index_tip = landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
+    index_dip = landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_DIP]
+
+    if abs(thumb_tip.x - index_tip.x) < 0.05 and abs(thumb_tip.y - index_tip.y) < 0.05:
+        if abs(index_tip.x - index_dip.x) < 0.05 and abs(index_tip.y - index_dip.y) < 0.05:
+            return True
     return False
 
 cap = cv2.VideoCapture(0)
@@ -76,6 +83,8 @@ while cap.isOpened():
                 cv2.putText(frame, 'T detected', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
             if is_E(hand_landmarks):
                 cv2.putText(frame, "E detected", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+            if is_O(hand_landmarks):
+                cv2.putText(frame, "O detected", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
     cv2.imshow('Gesture Recognition', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
