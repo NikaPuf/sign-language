@@ -6,30 +6,40 @@ hands = mp_hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5
 mp_drawing = mp.solutions.drawing_utils
 
 def is_L(hand_landmarks):
-
     thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
-    index_tip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
-    distance = abs(thumb_tip.x - index_tip.x)
-    return distance > 0.1
-
-def is_V(hand_landmarks):
     index_tip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
     middle_tip = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
     ring_tip = hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_TIP]
     pinky_tip = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_TIP]
+    middle_dip = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_DIP]
+    ring_dip = hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_DIP]
+    pinky_dip = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_DIP]
 
-    index_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP]
-    middle_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP]
-    ring_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_MCP]
-    pinky_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP]
+    distance = abs(thumb_tip.x - index_tip.x)
+    if distance > 0.1: #роверка расстояние между большим и указательным пальцем, 0.1 оптимальное расстояние
+        if (middle_tip.y > middle_dip.y and #проверка что остальные пальцы согнуты
+            ring_tip.y > ring_dip.y and
+            pinky_tip.y > pinky_dip.y):
+            return True
+    return False
 
-    is_index_up = index_tip.y < index_mcp.y
-    is_middle_up = middle_tip.y < middle_mcp.y
-    is_ring_folded = ring_tip.y > ring_mcp.y
-    is_pinky_folded = pinky_tip.y > pinky_mcp.y
-    is_fingers_separated = abs(index_tip.x - middle_tip.x) > 0.05
+def is_V(hand_landmarks):
+    thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP] #координаты точек пальцев
+    index_tip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
+    index_dip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_DIP]
+    middle_tip = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
+    middle_dip = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_DIP]
+    ring_tip = hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_TIP]
+    ring_dip = hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_DIP]
+    pinky_tip = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_TIP]
+    pinky_dip = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_DIP]
 
-    return is_index_up and is_middle_up and is_fingers_separated and is_ring_folded and is_pinky_folded
+    if index_tip.y < index_dip.y and middle_tip.y < middle_dip.y: #проеряем указательный и средний палец, что они вытянуты полность, между ними есть расстояние и другие согнуты
+        if ring_tip.y > ring_dip.y and pinky_tip.y > pinky_dip.y:
+            distance = abs(index_tip.x - middle_tip.x)
+            if distance > 0.07: #0.07 подобранное число для расстояние между указательным и средним пальцем, чтобы кончики пальцев были не очень близко друг к другу
+                return True
+    return False
 
 def is_T(landmarks):
 
