@@ -42,7 +42,6 @@ def is_V(hand_landmarks):
     return False
 
 def is_T(landmarks):
-
     thumb_tip = landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
     index_tip = landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
     middle_tip = landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
@@ -86,15 +85,15 @@ while cap.isOpened():
         for hand_landmarks in results.multi_hand_landmarks:
             mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
             if is_L(hand_landmarks):
-                cv2.putText(frame, "L Detected", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+                cv2.putText(frame, "L", (50, 80), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0), 6, cv2.LINE_AA)
             if is_V(hand_landmarks):
-                cv2.putText(frame, "V Detected", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+                cv2.putText(frame, "V", (50, 80), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0), 6, cv2.LINE_AA)
             if is_T(hand_landmarks):
-                cv2.putText(frame, 'T detected', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+                cv2.putText(frame, "T", (50, 80), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0), 6, cv2.LINE_AA)
             if is_E(hand_landmarks):
-                cv2.putText(frame, "E detected", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+                cv2.putText(frame, "E", (50, 80), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 255, 255), 6, cv2.LINE_AA)
             if is_O(hand_landmarks):
-                cv2.putText(frame, "O detected", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+                cv2.putText(frame, "O", (50, 80), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 255, 255), 6, cv2.LINE_AA)
 
     cv2.imshow('Gesture Recognition', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
