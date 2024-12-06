@@ -6,7 +6,7 @@ hands = mp_hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5
 mp_drawing = mp.solutions.drawing_utils
 
 def is_L(hand_landmarks):
-    thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
+    thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP] #координаты точек пальцев
     index_tip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
     middle_tip = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
     ring_tip = hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_TIP]
@@ -42,7 +42,7 @@ def is_V(hand_landmarks):
     return False
 
 def is_T(landmarks):
-    thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
+    thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP] #координаты точек пальцев
     index_tip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
     middle_tip = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
     ring_tip = hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_TIP]
@@ -62,7 +62,7 @@ def is_T(landmarks):
     return False
 
 def is_E(landmarks):
-    thumb_tip = landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
+    thumb_tip = landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP] #координаты точек пальцев
     index_tip = landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
     middle_tip = landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
     ring_tip = landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_TIP]
@@ -77,7 +77,7 @@ def is_E(landmarks):
     return False
 
 def is_O(landmarks):
-    thumb_tip = landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
+    thumb_tip = landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP] #координаты точек пальцев
     index_tip = landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
     index_dip = landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_DIP]
 
