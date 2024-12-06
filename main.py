@@ -42,13 +42,23 @@ def is_V(hand_landmarks):
     return False
 
 def is_T(landmarks):
-    thumb_tip = landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
-    index_tip = landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
-    middle_tip = landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
-    ring_tip = landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_TIP]
-    pinky_tip = landmarks.landmark[mp_hands.HandLandmark.PINKY_TIP]
-    if (thumb_tip.x < index_tip.x and index_tip.y < middle_tip.y and middle_tip.y < ring_tip.y and ring_tip.y < pinky_tip.y):
-        return True
+    thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
+    index_tip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
+    middle_tip = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
+    ring_tip = hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_TIP]
+    pinky_tip = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_TIP]
+
+    thumb_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_MCP]
+    index_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP]
+    middle_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP]
+    ring_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_MCP]
+    pinky_mcp = hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP]
+    if index_tip.x < thumb_tip.x < middle_tip.x: #проверяем что большой палец между указательным и средним
+        if (index_tip.y > index_mcp.y and #осьальные пальцы согнуты
+            middle_tip.y > middle_mcp.y and
+            ring_tip.y > ring_mcp.y and
+            pinky_tip.y > pinky_mcp.y):
+            return True
     return False
 
 def is_E(landmarks):
@@ -58,7 +68,11 @@ def is_E(landmarks):
     ring_tip = landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_TIP]
     pinky_tip = landmarks.landmark[mp_hands.HandLandmark.PINKY_TIP]
 
-    if thumb_tip.y < index_tip.y and thumb_tip.y < middle_tip.y and thumb_tip.y < ring_tip.y and thumb_tip.y < pinky_tip.y:
+    if ((thumb_tip.y < index_tip.y and
+        thumb_tip.y < middle_tip.y and
+        thumb_tip.y < ring_tip.y
+        and thumb_tip.y < pinky_tip.y)
+        and not (index_tip.x < thumb_tip.x < middle_tip.x)): #пальцы согнуты
         return True
     return False
 
@@ -67,7 +81,7 @@ def is_O(landmarks):
     index_tip = landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
     index_dip = landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_DIP]
 
-    if abs(thumb_tip.x - index_tip.x) < 0.05 and abs(thumb_tip.y - index_tip.y) < 0.05:
+    if abs(thumb_tip.x - index_tip.x) < 0.05 and abs(thumb_tip.y - index_tip.y) < 0.05: #пальцы в кольце для буквы о
         if abs(index_tip.x - index_dip.x) < 0.05 and abs(index_tip.y - index_dip.y) < 0.05:
             return True
     return False
@@ -95,7 +109,7 @@ while cap.isOpened():
             if is_O(hand_landmarks):
                 cv2.putText(frame, "O", (50, 80), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 255, 255), 6, cv2.LINE_AA)
 
-    cv2.imshow('Gesture Recognition', frame)
+    cv2.imshow('Sign Language', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
